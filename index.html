@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<!--
+  Bilingual version of Smaïn Yahiaoui's consulting site.  This file embeds both
+  French and English content.  A language selector in the header toggles
+  between the two languages.  French is shown by default.  All sections
+  contain duplicated content, wrapped with a data-lang attribute.  When the
+  document root has class "lang-fr" only [data-lang="fr"] is displayed;
+  when class "lang-en" only [data-lang="en"] is displayed.
+-->
+<html lang="fr" class="lang-fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smaïn Yahiaoui – Chef Consultant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --gold:#c59d5f;
+      --gold-dark:#a67c3d;
+      --ink:#333;
+      --bg:#fffaf4;
+      --card:#ffffff;
+      --line:#eee2cf;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+    a{color:var(--gold);text-decoration:none}
+    a:hover{color:var(--gold-dark)}
+    header{
+      position:sticky;top:0;z-index:1000;background:#fff;
+      border-bottom:2px solid var(--line);
+      display:flex;gap:24px;align-items:center;justify-content:space-between;
+      padding:14px 6vw;
+    }
+    header .brand{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--ink)}
+    nav a{margin:0 .7rem;color:var(--ink);font-weight:600}
+    nav a:hover{color:var(--gold)}
+    /* language selector */
+    .lang-select{
+      margin-left:auto;
+      padding:4px 8px;
+      border:1px solid var(--line);
+      border-radius:6px;
+      background:#fff;
+      color:var(--ink);
+      font-size:0.9rem;
+      cursor:pointer;
+    }
+    section{padding:80px 6vw}
+    h2{font-family:'Playfair Display',serif;color:var(--gold);font-size:2.2rem;margin-bottom:18px;text-align:center}
+    /* HERO */
+    .hero{position:relative;height:80vh;overflow:hidden}
+    .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.55)}
+    .hero .content{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:0 24px}
+    .hero h1{font-family:'Playfair Display',serif;font-size:3rem;margin-bottom:.5rem}
+    .btn{display:inline-block;background:var(--gold);color:#fff;border:0;border-radius:28px;padding:12px 22px;font-weight:700;cursor:pointer;text-align:center}
+    .btn:hover{background:var(--gold-dark)}
+    /* CARDS / GRIDS */
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.06);overflow:hidden}
+    .card img{width:100%;height:220px;object-fit:cover;display:block;transition:transform .3s ease}
+    .card:hover img{transform:scale(1.04)}
+    .overlay{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.55));color:#fff;padding:10px 12px;font-weight:600;opacity:0;transition:opacity .25s ease}
+    .tile{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+    .tile img{width:100%;height:240px;object-fit:cover;display:block;transition:transform .3s ease}
+    .tile:hover img{transform:scale(1.05)}
+    .tile:hover .overlay{opacity:1}
+    /* BIO */
+    .lead{text-align:center;max-width:1000px;margin:0 auto 10px}
+    .bio-long{display:none;max-width:1000px;margin:18px auto 0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+    .bio-long h3{font-family:'Playfair Display',serif;color:var(--gold);margin:14px 0 6px}
+    .bio-long ul{margin:8px 0 14px 18px}
+    .bio-long li{margin:6px 0}
+    /* EVENT FORM */
+    .card-devis{max-width:980px;margin:22px auto 0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;box-shadow:0 6px 20px rgba(0,0,0,.07)}
+    .card-devis h3{font-family:'Playfair Display',serif;color:var(--gold);margin-bottom:10px}
+    .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:12px}
+    .card-devis label,.card-devis legend{font-weight:600}
+    .card-devis input,.card-devis textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;background:#fafafa}
+    .card-devis input:focus,.card-devis textarea:focus{outline:none;border-color:var(--gold);background:#fff}
+    .chips{border:none;margin:10px 0;padding:0;display:flex;gap:12px;flex-wrap:wrap}
+    .chips label{border:1px solid #e9dec9;background:#f6f3ee;border-radius:999px;padding:8px 12px;cursor:pointer}
+    /* ARTICLES LIST */
+    .article-list{max-width:980px;margin:10px auto 0;list-style:none}
+    .article-list li{background:#fff;border:1px solid var(--line);border-radius:12px;margin:8px 0;padding:12px 14px;box-shadow:0 3px 10px rgba(0,0,0,.04)}
+    .article-list a{font-weight:700}
+    /* CONTACT */
+    .contact{max-width:900px;margin:0 auto;text-align:center}
+    .contact a{word-break:break-all}
+    footer{background:#222;color:#fff;text-align:center;padding:22px;margin-top:40px}
+    /* ---- Articles visuels ---- */
+    .article-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:18px;
+      margin-top:12px;
+    }
+    .article-card{
+      position:relative;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid var(--line, #eee2cf);
+      background:#fff;
+      box-shadow:0 8px 22px rgba(0,0,0,.06);
+      text-decoration:none;
+      color:#222;
+      transition:transform .18s ease, box-shadow .18s ease;
+      display:block;
+    }
+    .article-thumb{
+      height:160px;
+      background:
+        linear-gradient(135deg, rgba(197,157,95,.18), rgba(255,255,255,.6)),
+        radial-gradient(1200px 400px at 0% 0%, rgba(197,157,95,.25), transparent 60%),
+        linear-gradient(180deg, #f8f4ec, #ffffff);
+    }
+    .article-card:hover{ transform:translateY(-3px); box-shadow:0 12px 26px rgba(0,0,0,.09); }
+    .article-meta{ padding:12px 14px 14px; }
+    .article-title{ font-weight:700; line-height:1.25; margin:0 0 6px; }
+    .article-source{
+      display:inline-block; font-size:.85rem; color:#666; border:1px solid #eadfc8;
+      padding:4px 8px; border-radius:999px; background:#faf7f1;
+    }
+    /* Language visibility rules */
+    [data-lang]{ display:none; }
+    html.lang-fr [data-lang="fr"]{ display:initial; }
+    html.lang-en [data-lang="en"]{ display:initial; }
+    /*
+      SEO metadata: description, keywords, and JSON-LD structured data to improve
+      search visibility. These comments are here to remind us where the
+      metadata is injected below (outside of the style block).  These rules
+      do not affect the page layout.
+    */
+  </style>
+
+  <!-- === START: Open Graph / Twitter / SEO (added 2025-08-23) === -->
+    <!-- Canonical & hreflang -->
+    <link rel="canonical" href="https://smain-yahiaoui.com/">
+    <link rel="alternate" href="https://smain-yahiaoui.com/" hreflang="fr">
+    <link rel="alternate" href="https://smain-yahiaoui.com/?lang=en" hreflang="en">
+    <link rel="alternate" href="https://smain-yahiaoui.com/" hreflang="x-default">
+
+    <!-- Meta de base -->
+    <meta name="description" content="Smaïn Yahiaoui – Chef consultant pâtissier, boulanger & glacier. Créations & concepts café-boulangerie, formation & coaching, événements.">
+    <meta name="robots" content="index,follow,max-image-preview:large">
+    <meta name="theme-color" content="#c59d5f">
+    <meta name="keywords" content="chef, chef français, chef algérien, chef international, chef pâtissier, chef boulanger, chef consultant, consultant pâtisserie, consultant boulangerie">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://smain-yahiaoui.com/">
+    <meta property="og:title" content="Smaïn Yahiaoui – Chef Consultant">
+    <meta property="og:description" content="Chef consultant pâtissier, boulanger & glacier. Créations & concepts café-boulangerie, formation & coaching, événements.">
+    <meta property="og:site_name" content="Smaïn Yahiaoui – Chef Consultant">
+    <meta property="og:image" content="https://smain-yahiaoui.com/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Image gourmande de pâtisseries artisanales – Smaïn Yahiaoui, Chef consultant.">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Smaïn Yahiaoui – Chef Consultant">
+    <meta name="twitter:description" content="Chef consultant pâtissier, boulanger & glacier. Créations & concepts café-boulangerie, formation & coaching, événements.">
+    <meta name="twitter:image" content="https://smain-yahiaoui.com/og-image.jpg">
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Smaïn Yahiaoui",
+      "jobTitle": "Chef Consultant pâtissier, boulanger & glacier",
+      "url": "https://smain-yahiaoui.com/",
+      "image": "https://smain-yahiaoui.com/og-image.jpg",
+      "sameAs": [
+        "https://www.instagram.com/smain.yahiaoui"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Smaïn Yahiaoui – Chef Consultant",
+        "url": "https://smain-yahiaoui.com/"
+      }
+    }
+    </script>
+    <!-- === END: Open Graph / Twitter / SEO === -->
+</head>
+<body>
+
+  <header>
+    <div class="brand">Smaïn Yahiaoui</div>
+    <!-- French navigation -->
+    <nav data-lang="fr">
+      <a href="#bio-fr">Biographie</a>
+      <a href="#services-fr">Services</a>
+      <a href="#evenementiel-fr">Événementiel</a>
+      <a href="#vision-fr">Vision</a>
+      <a href="#moments-fr">Moments</a>
+      <a href="#productions-fr">Productions</a>
+      <a href="#articles-fr">Articles</a>
+      <a href="#contact-fr">Contact</a>
+    </nav>
+    <!-- English navigation -->
+    <nav data-lang="en">
+      <a href="#bio-en">Biography</a>
+      <a href="#services-en">Services</a>
+      <a href="#evenementiel-en">Events</a>
+      <a href="#vision-en">Vision</a>
+      <a href="#moments-en">Highlights</a>
+      <a href="#productions-en">Productions</a>
+      <a href="#articles-en">Articles</a>
+      <a href="#contact-en">Contact</a>
+    </nav>
+    <select id="lang-select" class="lang-select" aria-label="Select language">
+      <option value="fr" selected>FR</option>
+      <option value="en">EN</option>
+    </select>
+  </header>
+
+  <!-- HERO VIDEO -->
+  <section class="hero" aria-label="Accueil vidéo">
+    <video autoplay muted loop playsinline poster="">
+      <!-- Essayez avec votre fichier principal -->
+      <source src="Lemon Tart.mp4" type="video/mp4">
+      <!-- Fallback si vous l'avez nommé autrement -->
+      <source src="video.mp4" type="video/mp4">
+    </video>
+    <div class="content">
+      <h1 data-lang="fr">Chef Consultant Pâtissier • Boulanger • Glacier</h1>
+      <h1 data-lang="en">Consultant Pastry Chef • Baker • Ice Cream Maker</h1>
+      <p data-lang="fr">Tradition française, exigence technique et vision internationale pour des projets d’exception.</p>
+      <p data-lang="en">French tradition, technical excellence and international vision for exceptional projects.</p>
+      <a class="btn" data-lang="fr" href="#bio-fr">Découvrir mon parcours</a>
+      <a class="btn" data-lang="en" href="#bio-en">Discover my story</a>
+    </div>
+  </section>
+
+  <!-- BIOGRAPHY SECTIONS -->
+  <section id="bio-fr" data-lang="fr">
+    <h2>Biographie</h2>
+    <p class="lead">
+      <strong>Smaïn Yahiaoui – Chef Consultant Pâtissier, Boulanger &amp; Glacier.</strong>
+      Artisan passionné originaire d’Albi, Smaïn s’est formé auprès des plus grands noms&nbsp;: URMA du Tarn avec Alexandre Lopez (Champion du monde de boulangerie), Ferrandi Paris et École Ducasse. Il a perfectionné son art au sein de maisons prestigieuses&nbsp;: Yves Thuriès, Plaza Athénée, Le&nbsp;Grenier à Pain – Michel Galloyer, Groupe Belles Rives avec Steve Moracchini, Franck Putelat et Emmanuel Ryon (MOF Glacier). Globe‑trotter, il a exercé en Italie, Suisse, Miami (Zak the&nbsp;Baker) et Tokyo (Café&nbsp;Louis&nbsp;Vuitton). Aujourd’hui, il accompagne boulangeries, pâtisseries et coffee shops en tant que consultant, alliant tradition, excellence et créativité.
+    </p>
+    <div style="text-align:center;margin-top:10px">
+      <button class="btn" onclick="document.getElementById('bio-long-fr').style.display='block'; this.style.display='none';">Lire la biographie complète</button>
+    </div>
+    <div id="bio-long-fr" class="bio-long">
+      <p><em>« De la décoration des murs à sublimer les tables, un parcours guidé par la passion, les voyages et l’excellence artisanale française. »</em></p>
+      <p>Originaire d’Albi, dans le sud de la France, Smaïn Yahiaoui débute sa carrière dans la peinture en bâtiment, où il obtient la médaille d’argent départementale du concours Meilleur Apprenti de France (MAF). Des problèmes de santé l’amènent à changer de voie. Lors de ses premiers voyages, en Égypte et en Algérie, il réalise à quel point le pain artisanal français lui manque. Cette révélation le pousse à se réinventer pour partager et transmettre l’excellence de la boulangerie et pâtisserie françaises dans le monde entier.</p>
+      <h3>Formations d’excellence</h3>
+      <ul>
+        <li>URMA du Tarn, formé par Alexandre Lopez (Champion du monde de boulangerie, 2008).</li>
+        <li>Ferrandi Paris, école emblématique de la gastronomie française.</li>
+        <li>École&nbsp;Ducasse – École Nationale Supérieure de Pâtisserie (ENSP), spécialisation pâtisserie &amp; glacerie.</li>
+      </ul>
+      <h3>Maisons prestigieuses &amp; collaborations</h3>
+      <ul>
+        <li>Chocolaterie Yves Thuriès (double MOF), confiserie &amp; chocolat.</li>
+        <li>Plaza&nbsp;Athénée, Paris.</li>
+        <li>Groupe&nbsp;Belles Rives (avec Steve&nbsp;Moracchini), Côte d’Azur.</li>
+        <li>Maison Sébastien Bouillet, Lyon.</li>
+        <li>Maison Franck Putelat (2★ Michelin, MOF).</li>
+        <li>Stage auprès d’Emmanuel&nbsp;Ryon (Champion du monde glacier, MOF).</li>
+        <li>Le&nbsp;Grenier à Pain – Michel&nbsp;Galloyer.</li>
+      </ul>
+      <h3>Passages à l’international</h3>
+      <ul>
+        <li>Italie – desserts &amp; viennoiseries italiennes.</li>
+        <li>Suisse – ouverture &amp; développement d’une boulangerie artisanale.</li>
+        <li>États‑Unis – Zak&nbsp;the&nbsp;Baker (Miami), institution Kosher.</li>
+        <li>Japon – Café&nbsp;Louis&nbsp;Vuitton (Tokyo).</li>
+      </ul>
+      <h3>Activité de consultant</h3>
+      <ul>
+        <li>Formation &amp; accompagnement des équipes.</li>
+        <li>Création de gammes artisanales haut de gamme adaptées à chaque marché.</li>
+        <li>Mise en place d’organisations performantes &amp; standards qualité élevés.</li>
+      </ul>
+      <h3>Événements marquants</h3>
+      <ul>
+        <li>Guinness&nbsp;World&nbsp;Record du plus long fraisier du monde (121,88 m) – 2025.</li>
+        <li>Finaliste « Meilleure baguette, croissant, pain au chocolat » – Floride.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="bio-en" data-lang="en">
+    <h2>Biography</h2>
+    <p class="lead">
+      <strong>Smaïn Yahiaoui – Consultant Pastry Chef, Baker &amp; Ice Cream Maker.</strong>
+      A passionate artisan from Albi, Smaïn trained with some of the greatest names: URMA&nbsp;du&nbsp;Tarn with Alexandre&nbsp;Lopez (World Baking Champion), Ferrandi&nbsp;Paris and École&nbsp;Ducasse. He refined his craft in prestigious establishments: Yves&nbsp;Thuriès, Plaza&nbsp;Athénée, Le&nbsp;Grenier&nbsp;à&nbsp;Pain – Michel&nbsp;Galloyer, Groupe&nbsp;Belles&nbsp;Rives with Steve&nbsp;Moracchini, Franck&nbsp;Putelat and Emmanuel&nbsp;Ryon (MOF Ice&nbsp;Cream). As a globetrotter, he has worked in Italy, Switzerland, Miami (Zak&nbsp;the&nbsp;Baker) and Tokyo (Café&nbsp;Louis&nbsp;Vuitton). Today, he supports bakeries, pastry shops and coffee shops as a consultant, blending tradition, excellence and creativity.
+    </p>
+    <div style="text-align:center;margin-top:10px">
+      <button class="btn" onclick="document.getElementById('bio-long-en').style.display='block'; this.style.display='none';">Read the full biography</button>
+    </div>
+    <div id="bio-long-en" class="bio-long">
+      <p><em>"From decorating walls to embellishing tables, a journey guided by passion, travel and French artisanal excellence."</em></p>
+      <p>Originally from Albi in the south of France, Smaïn Yahiaoui began his career in painting and decorating, where he received the departmental silver medal in the "Meilleur Apprenti de France" competition (MAF). Health issues led him to change course. During his first travels, in Egypt and Algeria, he realised how much he missed French artisanal bread. This revelation drove him to reinvent himself in order to share and transmit the excellence of French bakery and pastry around the world.</p>
+      <h3>Top training</h3>
+      <ul>
+        <li>URMA&nbsp;du&nbsp;Tarn, trained by Alexandre&nbsp;Lopez (World Baking Champion, 2008).</li>
+        <li>Ferrandi&nbsp;Paris, an iconic school of French gastronomy.</li>
+        <li>École&nbsp;Ducasse – École&nbsp;Nationale&nbsp;Supérieure&nbsp;de&nbsp;Pâtisserie (ENSP), specialising in pastry &amp; ice cream.</li>
+      </ul>
+      <h3>Prestigious houses &amp; collaborations</h3>
+      <ul>
+        <li>Yves&nbsp;Thuriès chocolaterie (double MOF), confectionery &amp; chocolate.</li>
+        <li>Plaza&nbsp;Athénée, Paris.</li>
+        <li>Groupe&nbsp;Belles&nbsp;Rives (with Steve&nbsp;Moracchini), Côte&nbsp;d’Azur.</li>
+        <li>Maison&nbsp;Sébastien Bouillet, Lyon.</li>
+        <li>Maison&nbsp;Franck&nbsp;Putelat (2★ Michelin, MOF).</li>
+        <li>Internship with Emmanuel&nbsp;Ryon (World Ice&nbsp;Cream Champion, MOF).</li>
+        <li>Le&nbsp;Grenier&nbsp;à&nbsp;Pain – Michel&nbsp;Galloyer.</li>
+      </ul>
+      <h3>International experiences</h3>
+      <ul>
+        <li>Italy – Italian desserts &amp; viennoiseries.</li>
+        <li>Switzerland – opening &amp; development of an artisanal bakery.</li>
+        <li>United&nbsp;States – Zak&nbsp;the&nbsp;Baker (Miami), kosher institution.</li>
+        <li>Japan – Café&nbsp;Louis&nbsp;Vuitton (Tokyo).</li>
+      </ul>
+      <h3>Consultancy activities</h3>
+      <ul>
+        <li>Training &amp; team support.</li>
+        <li>Creation of high-end artisan ranges tailored to each market.</li>
+        <li>Implementation of efficient organisations &amp; high quality standards.</li>
+      </ul>
+      <h3>Key events</h3>
+      <ul>
+        <li>Guinness&nbsp;World&nbsp;Record for the longest fraisier (121.88&nbsp;m) – 2025.</li>
+        <li>Finalist "Best Baguette, Croissant, Pain&nbsp;au&nbsp;Chocolat" – Florida.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services-fr" data-lang="fr">
+    <h2>Services</h2>
+    <div class="grid">
+      <div class="tile">
+        <!-- Corrected alt text and overlay: this first tile now reflects café and bakery concepts -->
+        <img src="services1.jpg" alt="Développement de concepts café et boulangerie">
+        <div class="overlay">Concept café &amp; boulangerie</div>
+      </div>
+      <div class="tile">
+        <!-- Second tile now refers to training and coaching teams -->
+        <img src="services2.jpg" alt="Formation et coaching d'équipes culinaires">
+        <div class="overlay">Formation &amp; coaching</div>
+      </div>
+      <div class="tile">
+        <!-- Third tile now emphasises international openings/support -->
+        <img src="services3.jpg" alt="Accompagnement à l’ouverture internationale">
+        <div class="overlay">Ouverture internationale</div>
+      </div>
+      <div class="tile">
+        <!-- Fourth tile now highlights high‑end dessert creation and recipes -->
+        <img src="services4.jpg" alt="Création de desserts haut de gamme (recettes)">
+        <div class="overlay">Desserts haut de gamme (Recette)</div>
+      </div>
+      <div class="tile">
+        <img src="services5.jpg" alt="Service événementiel : chef privé, shows culinaires, pop-up">
+        <div class="overlay">Événementiel : Chef privé • Shows • Pop‑up</div>
+      </div>
+    </div>
+    <p style="max-width:900px;margin:14px auto 0;text-align:center;color:#555">
+      <strong>Événementiel :</strong> prestations de <em>chef privé</em> pour mariages &amp; dîners exclusifs,
+      <em>shows culinaires</em> en public, et <em>pâtisserie éphémère</em> (salons, festivals, pop‑up).
+    </p>
+  </section>
+
+  <section id="services-en" data-lang="en">
+    <h2>Services</h2>
+    <div class="grid">
+      <div class="tile">
+        <!-- First tile now reflects coffee shop and bakery concepts -->
+        <img src="services1.jpg" alt="Development of coffee shop & bakery concepts">
+        <div class="overlay">Coffee shop &amp; bakery concepts</div>
+      </div>
+      <div class="tile">
+        <!-- Second tile emphasises team training and coaching -->
+        <img src="services2.jpg" alt="Team training and coaching">
+        <div class="overlay">Training &amp; coaching</div>
+      </div>
+      <div class="tile">
+        <!-- Third tile highlights international opening support -->
+        <img src="services3.jpg" alt="International opening support">
+        <div class="overlay">International openings</div>
+      </div>
+      <div class="tile">
+        <!-- Fourth tile now refers to high‑end dessert creation and recipes -->
+        <img src="services4.jpg" alt="High‑end dessert creation (recipes)">
+        <div class="overlay">High‑end desserts (Recipes)</div>
+      </div>
+      <div class="tile">
+        <img src="services5.jpg" alt="Events service: private chef, culinary shows, pop-up">
+        <div class="overlay">Events: Private chef • Shows • Pop‑up</div>
+      </div>
+    </div>
+    <p style="max-width:900px;margin:14px auto 0;text-align:center;color:#555">
+      <strong>Events:</strong> private chef services for weddings &amp; exclusive dinners,
+      public culinary shows, and pop‑up pastry (trade shows, festivals, pop‑ups).
+    </p>
+  </section>
+
+  <!-- ÉVÉNEMENTIEL / EVENTS SECTION -->
+  <section id="evenementiel-fr" data-lang="fr">
+    <h2>Événementiel</h2>
+    <p class="lead" style="margin-bottom:10px">
+      Expérience sur‑mesure, organisation clé‑en‑main et exigence du détail pour vos événements privés et professionnels.
+    </p>
+    <div class="grid" style="margin-bottom:18px">
+      <div class="tile"><img src="services5.jpg" alt="Événementiel"><div class="overlay">Chef privé • Shows • Pop‑up</div></div>
+    </div>
+    <div class="card-devis">
+      <h3>Demande de devis</h3>
+      <!--
+        Updated request form:
+        Instead of submitting via a mailto: link (which required a client-side email
+        application and could be blocked in some browsers), the form is now
+        configured for server‑side handling using Netlify Forms. When hosted on
+        Netlify, adding the `data-netlify="true"` attribute tells Netlify to
+        capture submissions and deliver them to the site owner via the Netlify
+        dashboard or email notifications. The hidden `form-name` field must
+        match the form name (id) so Netlify can identify it. A honeypot
+        (`data-netlify-honeypot="bot-field"`) field is also included to deter spambots.
+      -->
+      <form id="devis-form-fr" name="devis-form-fr" method="POST" data-netlify="true" action="/merci.html" data-netlify-honeypot="bot-field">
+        <!-- Netlify requires a hidden input with the form name -->
+        <input type="hidden" name="form-name" value="devis-form-fr">
+        <!-- Honeypot field to catch bots; hidden from users -->
+        <p style="display:none">
+          <label>Don’t fill this out if you’re human: <input name="bot-field"></label>
+        </p>
+        <div class="grid-2">
+          <div><label>Nom &amp; Prénom</label><input type="text" name="nom" required></div>
+          <div><label>E‑mail</label><input type="email" name="email" required></div>
+          <div><label>Date souhaitée</label><input type="date" name="date"></div>
+          <div><label>Lieu (ville/pays)</label><input type="text" name="lieu"></div>
+          <div><label>Nombre de convives</label><input type="number" name="convives" min="1"></div>
+          <div><label>Budget indicatif (€)</label><input type="number" name="budget" min="0" step="50"></div>
+        </div>
+        <fieldset class="chips">
+          <legend>Type de prestation</legend>
+          <label><input type="checkbox" name="prestation" value="Chef privé"> Chef privé</label>
+          <label><input type="checkbox" name="prestation" value="Show culinaire"> Show culinaire</label>
+          <label><input type="checkbox" name="prestation" value="Pop-up / Éphémère"> Pop‑up / Éphémère</label>
+        </fieldset>
+        <label>Détails &amp; attentes</label>
+        <textarea name="message" rows="5" placeholder="Thème, contraintes, envies…"></textarea>
+        <div style="margin-top:10px">
+          <button class="btn" type="submit">Envoyer la demande</button>
+          <p style="margin-top:6px;color:#666">Ou écrivez‑moi : <a href="mailto:contact@smain-yahiaoui.com">contact@smain-yahiaoui.com</a></p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section id="evenementiel-en" data-lang="en">
+    <h2>Events</h2>
+    <p class="lead" style="margin-bottom:10px">
+      Tailor‑made experience, turnkey organisation and attention to detail for your private and professional events.
+    </p>
+    <div class="grid" style="margin-bottom:18px">
+      <div class="tile"><img src="services5.jpg" alt="Events"><div class="overlay">Private chef • Shows • Pop‑up</div></div>
+    </div>
+    <div class="card-devis">
+      <h3>Request a quote</h3>
+      <!--
+        Updated request form (English version):
+        This form previously used a `mailto:` action which attempted to open the
+        user’s default email client. To ensure reliable submissions on a static
+        site, it now leverages Netlify Forms. The `data-netlify="true"` attribute
+        enables Netlify’s form handling; a hidden `form-name` field identifies
+        the form to Netlify, and a hidden honeypot field helps prevent spam.
+      -->
+      <form id="devis-form-en" name="devis-form-en" method="POST" data-netlify="true" action="/merci.html" data-netlify-honeypot="bot-field">
+        <!-- Hidden form name for Netlify -->
+        <input type="hidden" name="form-name" value="devis-form-en">
+        <!-- Hidden anti‑bot field; users should not see this -->
+        <p style="display:none">
+          <label>Don’t fill this out if you’re human: <input name="bot-field"></label>
+        </p>
+        <div class="grid-2">
+          <div><label>Full name</label><input type="text" name="nom" required></div>
+          <div><label>Email</label><input type="email" name="email" required></div>
+          <div><label>Preferred date</label><input type="date" name="date"></div>
+          <div><label>Location (city/country)</label><input type="text" name="lieu"></div>
+          <div><label>Number of guests</label><input type="number" name="convives" min="1"></div>
+          <div><label>Indicative budget (€)</label><input type="number" name="budget" min="0" step="50"></div>
+        </div>
+        <fieldset class="chips">
+          <legend>Type of service</legend>
+          <label><input type="checkbox" name="prestation" value="Private chef"> Private chef</label>
+          <label><input type="checkbox" name="prestation" value="Cooking show"> Cooking show</label>
+          <label><input type="checkbox" name="prestation" value="Pop-up / Temporary"> Pop‑up / Temporary</label>
+        </fieldset>
+        <label>Details &amp; expectations</label>
+        <textarea name="message" rows="5" placeholder="Theme, constraints, desires…"></textarea>
+        <div style="margin-top:10px">
+          <button class="btn" type="submit">Send the request</button>
+          <p style="margin-top:6px;color:#666">Or write to me: <a href="mailto:contact@smain-yahiaoui.com">contact@smain-yahiaoui.com</a></p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- VISION SECTION -->
+  <section id="vision-fr" data-lang="fr">
+    <h2>Signature &amp; Vision professionnelle</h2>
+    <p class="lead" style="max-width:900px">
+      Artisan passionné et globe‑trotter, Smaïn&nbsp;Yahiaoui incarne l’authenticité et l’exigence du savoir‑faire français. Son parcours, marqué par des collaborations avec des figures emblématiques de la gastronomie mondiale, illustre sa volonté de transmettre son expertise à travers le monde, que ce soit à travers ses créations ou son rôle de consultant.
+    </p>
+  </section>
+
+  <section id="vision-en" data-lang="en">
+    <h2>Signature &amp; Professional vision</h2>
+    <p class="lead" style="max-width:900px">
+      A passionate artisan and globe‑trotter, Smaïn&nbsp;Yahiaoui embodies the authenticity and high standards of French craftsmanship. His journey, marked by collaborations with emblematic figures of world gastronomy, illustrates his desire to share his expertise around the world, whether through his creations or his role as a consultant.
+    </p>
+  </section>
+
+  <!-- MOMENTS / HIGHLIGHTS -->
+  <section id="moments-fr" data-lang="fr">
+    <h2>Moments marquants</h2>
+    <div class="grid">
+      <div class="tile"><img src="Café Louis Vuitton.jpg" alt="Café Louis Vuitton Tokyo"><div class="overlay">Café Louis Vuitton – Tokyo</div></div>
+      <div class="tile"><img src="Concours Floride.jpg" alt="Concours Floride"><div class="overlay">Concours – Floride</div></div>
+      <div class="tile"><img src="Guinness World Record.jpg" alt="Guinness World Record"><div class="overlay">Guinness World Record – 121,88 m</div></div>
+    </div>
+  </section>
+
+  <section id="moments-en" data-lang="en">
+    <h2>Highlights</h2>
+    <div class="grid">
+      <div class="tile"><img src="Café Louis Vuitton.jpg" alt="Café Louis Vuitton Tokyo"><div class="overlay">Café Louis Vuitton – Tokyo</div></div>
+      <div class="tile"><img src="Concours Floride.jpg" alt="Competition Florida"><div class="overlay">Competition – Florida</div></div>
+      <div class="tile"><img src="Guinness World Record.jpg" alt="Guinness World Record"><div class="overlay">Guinness World Record – 121.88&nbsp;m</div></div>
+    </div>
+  </section>
+
+  <!-- PRODUCTIONS -->
+  <section id="productions-fr" data-lang="fr">
+    <h2>Productions &amp; Réalisations</h2>
+    <div class="grid">
+      <div class="tile"><img src="glace1.jpg" alt="Produit glacé"></div>
+      <div class="tile"><img src="glace2.jpg" alt="Produit glacé"></div>
+      <div class="tile"><img src="viennoiserie1.jpg" alt="Viennoiserie"></div>
+      <div class="tile"><img src="viennoiserie2.jpg" alt="Viennoiserie"></div>
+      <div class="tile"><img src="pain1.jpg" alt="Pain"></div>
+      <div class="tile"><img src="pain2.jpg" alt="Pain"></div>
+      <div class="tile"><img src="patisserie1.jpg" alt="Pâtisserie"></div>
+      <div class="tile"><img src="patisserie2.jpg" alt="Pâtisserie"></div>
+      <div class="tile"><img src="snacking1.jpg" alt="Snacking"></div>
+    </div>
+  </section>
+
+  <section id="productions-en" data-lang="en">
+    <h2>Productions &amp; Creations</h2>
+    <div class="grid">
+      <div class="tile"><img src="glace1.jpg" alt="Frozen product"></div>
+      <div class="tile"><img src="glace2.jpg" alt="Frozen product"></div>
+      <div class="tile"><img src="viennoiserie1.jpg" alt="Viennoiserie"></div>
+      <div class="tile"><img src="viennoiserie2.jpg" alt="Viennoiserie"></div>
+      <div class="tile"><img src="pain1.jpg" alt="Bread"></div>
+      <div class="tile"><img src="pain2.jpg" alt="Bread"></div>
+      <div class="tile"><img src="patisserie1.jpg" alt="Pastry"></div>
+      <div class="tile"><img src="patisserie2.jpg" alt="Pastry"></div>
+      <div class="tile"><img src="snacking1.jpg" alt="Snacking"></div>
+    </div>
+  </section>
+
+  <!-- ARTICLES -->
+  <section id="articles-fr" data-lang="fr">
+    <h2>Articles</h2>
+    <div class="article-grid">
+      <!-- École Ducasse -->
+      <a class="article-card" href="https://www.ecoleducasse.com/Nos-Alumni/smain-yahiaoui" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">Profil Alumni – Smaïn Yahiaoui</div>
+          <span class="article-source">École Ducasse</span>
+        </div>
+      </a>
+      <!-- La Dépêche – Record du fraisier (lien 1) -->
+      <a class="article-card" href="https://www.ladepeche.fr/2025/04/20/110-metres-de-dessert-pour-un-record-mondial-ce-patissier-albigeois-veut-remettre-la-france-en-haut-du-fraisier-12645174.php" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">110 m de dessert pour un record mondial</div>
+          <span class="article-source">La&nbsp;Dépêche</span>
+        </div>
+      </a>
+      <!-- La Dépêche – Record du fraisier (lien 2) -->
+      <a class="article-card" href="https://www.ladepeche.fr/2025/04/24/le-fraisier-je-maitrise-un-patissier-albigeois-brille-dans-un-record-du-monde-made-in-france-12655358.php" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">« Le fraisier, je maîtrise » – record made in France</div>
+          <span class="article-source">La&nbsp;Dépêche</span>
+        </div>
+      </a>
+      <!-- La Dépêche – USA / parcours -->
+      <a class="article-card" href="https://www.ladepeche.fr/2024/05/23/ici-on-na-pas-de-tabou-cet-ancien-patissier-de-cantepau-part-a-la-conquete-des-etats-unis-11969288.php" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">De Cantepau à la conquête des États-Unis</div>
+          <span class="article-source">La&nbsp;Dépêche</span>
+        </div>
+      </a>
+      <!-- TRT Français -->
+      <a class="article-card" href="https://trt.global/fran%C3%A7ais/article/11245904" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">Portrait / interview</div>
+          <span class="article-source">TRT (français)</span>
+        </div>
+      </a>
+      <!-- Instagram – post Guinness -->
+      <a class="article-card" href="https://www.instagram.com/p/DJJM7aVolyx/" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">Guinness World Record – post</div>
+          <span class="article-source">Instagram</span>
+        </div>
+      </a>
+      <!-- Instagram – reel interview -->
+      <a class="article-card" href="https://www.instagram.com/reel/DI1cYb8Pomx/?igsh=cjhqbGx3Mmh2eXJp" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">Interview – reel</div>
+          <span class="article-source">Instagram</span>
+        </div>
+      </a>
+      <!-- Magazine Grand Albigeois (PDF) -->
+      <a class="article-card" href="https://www.grand-albigeois.fr/wp-content/uploads/2024/08/00-GA87.pdf" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">Grand Albigeois – magazine (PDF)</div>
+          <span class="article-source">Magazine</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section id="articles-en" data-lang="en">
+    <h2>Articles</h2>
+    <div class="article-grid">
+      <!-- École Ducasse -->
+      <a class="article-card" href="https://www.ecoleducasse.com/Nos-Alumni/smain-yahiaoui" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">Alumni profile – Smaïn Yahiaoui</div>
+          <span class="article-source">École Ducasse</span>
+        </div>
+      </a>
+      <!-- La Dépêche – Record du fraisier (lien 1) -->
+      <a class="article-card" href="https://www.ladepeche.fr/2025/04/20/110-metres-de-dessert-pour-un-record-mondial-ce-patissier-albigeois-veut-remettre-la-france-en-haut-du-fraisier-12645174.php" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">110 m of dessert for a world record</div>
+          <span class="article-source">La&nbsp;Dépêche</span>
+        </div>
+      </a>
+      <!-- La Dépêche – Record du fraisier (lien 2) -->
+      <a class="article-card" href="https://www.ladepeche.fr/2025/04/24/le-fraisier-je-maitrise-un-patissier-albigeois-brille-dans-un-record-du-monde-made-in-france-12655358.php" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">"I master the fraisier" – record made in France</div>
+          <span class="article-source">La&nbsp;Dépêche</span>
+        </div>
+      </a>
+      <!-- La Dépêche – USA / parcours -->
+      <a class="article-card" href="https://www.ladepeche.fr/2024/05/23/ici-on-na-pas-de-tabou-cet-ancien-patissier-de-cantepau-part-a-la-conquete-des-etats-unis-11969288.php" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">From Cantepau to the conquest of the United States</div>
+          <span class="article-source">La&nbsp;Dépêche</span>
+        </div>
+      </a>
+      <!-- TRT Français -->
+      <a class="article-card" href="https://trt.global/fran%C3%A7ais/article/11245904" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">Portrait / interview</div>
+          <span class="article-source">TRT (French)</span>
+        </div>
+      </a>
+      <!-- Instagram – post Guinness -->
+      <a class="article-card" href="https://www.instagram.com/p/DJJM7aVolyx/" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">Guinness World Record – post</div>
+          <span class="article-source">Instagram</span>
+        </div>
+      </a>
+      <!-- Instagram – reel interview -->
+      <a class="article-card" href="https://www.instagram.com/reel/DI1cYb8Pomx/?igsh=cjhqbGx3Mmh2eXJp" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">Interview – reel</div>
+          <span class="article-source">Instagram</span>
+        </div>
+      </a>
+      <!-- Magazine Grand Albigeois (PDF) -->
+      <a class="article-card" href="https://www.grand-albigeois.fr/wp-content/uploads/2024/08/00-GA87.pdf" target="_blank" rel="noopener">
+        <div class="article-thumb"></div>
+        <div class="article-meta">
+          <div class="article-title">Grand Albigeois – magazine (PDF)</div>
+          <span class="article-source">Magazine</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact-fr" data-lang="fr">
+    <h2>Contact</h2>
+    <div class="contact">
+      <p>📧 <a href="mailto:contact@smain-yahiaoui.com">contact@smain-yahiaoui.com</a></p>
+      <p>📸 Instagram : <a href="https://www.instagram.com/smain.yahiaoui/" target="_blank" rel="noopener">instagram.com/smain.yahiaoui</a></p>
+    </div>
+    <div class="card-devis">
+      <h3>Contact rapide</h3>
+      <form id="contact-form-fr" name="contact-form-fr" method="POST" data-netlify="true" action="/merci.html" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contact-form-fr">
+        <p style="display:none">
+          <label>Don’t fill this out if you’re human: <input name="bot-field"></label>
+        </p>
+        <div class="grid-2">
+          <div><label>Nom</label><input type="text" name="nom" required></div>
+          <div><label>E‑mail</label><input type="email" name="email" required></div>
+        </div>
+        <label>Message</label>
+        <textarea name="message" rows="5" required></textarea>
+        <div style="margin-top:10px">
+          <button class="btn" type="submit">Envoyer</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section id="contact-en" data-lang="en">
+    <h2>Contact</h2>
+    <div class="contact">
+      <p>📧 <a href="mailto:contact@smain-yahiaoui.com">contact@smain-yahiaoui.com</a></p>
+      <p>📸 Instagram : <a href="https://www.instagram.com/smain.yahiaoui/" target="_blank" rel="noopener">instagram.com/smain.yahiaoui</a></p>
+    </div>
+    <div class="card-devis">
+      <h3>Quick Contact</h3>
+      <form id="contact-form-en" name="contact-form-en" method="POST" data-netlify="true" action="/merci.html" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contact-form-en">
+        <p style="display:none">
+          <label>Don’t fill this out if you’re human: <input name="bot-field"></label>
+        </p>
+        <div class="grid-2">
+          <div><label>Name</label><input type="text" name="nom" required></div>
+          <div><label>Email</label><input type="email" name="email" required></div>
+        </div>
+        <label>Message</label>
+        <textarea name="message" rows="5" required></textarea>
+        <div style="margin-top:10px">
+          <button class="btn" type="submit">Send</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span data-lang="fr">© 2025 Smaïn&nbsp;Yahiaoui – Chef Consultant • Tous droits réservés</span>
+    <span data-lang="en">© 2025 Smaïn&nbsp;Yahiaoui – Consultant Chef • All rights reserved</span>
+  </footer>
+
+  <script>
+    // Smooth scroll for anchors
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+    // Language switcher
+    const select = document.getElementById('lang-select');
+    select.addEventListener('change', function() {
+      const lang = this.value;
+      document.documentElement.setAttribute('lang', lang);
+      document.documentElement.classList.remove('lang-fr', 'lang-en');
+      document.documentElement.classList.add('lang-' + lang);
+    });
+  </script>
+</body>
+</html>

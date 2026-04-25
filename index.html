@@ -20,6 +20,9 @@
     "https://www.instagram.com/",
     "https://www.linkedin.com/"
   ]
+<meta name="author" content="Smaïn Yahiaoui">
+<meta name="geo.region" content="FR">
+<meta name="geo.placename" content="Albi / Tokyo">
 }
 </script>
   <meta charset="UTF-8" />
@@ -37,6 +40,20 @@
 <meta name="twitter:card" content="summary_large_image">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
+  .whatsapp-btn{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#25D366;
+    color:#fff;
+    font-size:24px;
+    padding:15px;
+    border-radius:50%;
+    z-index:999;
+    text-decoration:none;
+  }
+</style> 
+<style>
     :root{
       --gold:#c59d5f;
       --gold-dark:#a67c3d;
@@ -45,6 +62,12 @@
       --card:#ffffff;
       --line:#eee2cf;
     }
+.article-thumb{
+  width:100%;
+  height:160px;
+  object-fit:cover;
+  display:block;
+}
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
     a{color:var(--gold);text-decoration:none}
@@ -135,6 +158,14 @@
       gap:18px;
       margin-top:12px;
     }
+img{
+  transition:0.3s;
+}
+
+img:hover{
+  transform:scale(1.03);
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
     .article-card{
       position:relative;
       border-radius:14px;
@@ -617,7 +648,7 @@
     <div class="article-grid">
       <!-- École Ducasse -->
       <a class="article-card" href="https://www.ecoleducasse.com/Nos-Alumni/smain-yahiaoui" target="_blank" rel="noopener">
-        <div class="article-thumb"></div>
+        <img src="images/photo3.jpg" class="article-thumb" alt="">
         <div class="article-meta">
           <div class="article-title">Profil Alumni – Smaïn Yahiaoui</div>
           <span class="article-source">École Ducasse</span>
@@ -835,6 +866,8 @@
     document.documentElement.classList.add('lang-' + lang);
   });
 </script>
-
+<a href="https://wa.me/+33660121200" class="whatsapp-btn" target="_blank">
+  💬
+</a>
 </body>
 </html>

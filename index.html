@@ -813,26 +813,28 @@
 
 <script>
   document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Smooth scroll for anchors
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Language switcher
+  const select = document.getElementById('lang-select');
+  select.addEventListener('change', function() {
+    const lang = this.value;
+    document.documentElement.setAttribute('lang', lang);
+    document.documentElement.classList.remove('lang-fr', 'lang-en');
+    document.documentElement.classList.add('lang-' + lang);
+  });
 </script>
-    // Smooth scroll for anchors
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        const id = a.getAttribute('href').slice(1);
-        const el = document.getElementById(id);
-        if (el) {
-          e.preventDefault();
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    });
-    // Language switcher
-    const select = document.getElementById('lang-select');
-    select.addEventListener('change', function() {
-      const lang = this.value;
-      document.documentElement.setAttribute('lang', lang);
-      document.documentElement.classList.remove('lang-fr', 'lang-en');
-      document.documentElement.classList.add('lang-' + lang);
-    });
-  </script>
+
 </body>
 </html>
